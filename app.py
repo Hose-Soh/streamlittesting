@@ -48,7 +48,7 @@ st.write("Discover Soil Content, Water Content, Potential Evapotranspiration, Wa
 #First Map 
 #Create a map centered on a specific location, with Google Maps tiles
 
-m = folium.Map(location=[37.7749, -122.4194], zoom_start=12, tiles='https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}')
+m = folium.Map(location=[37.7749, -122.4194], zoom_start=12, tiles='https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}' , attr='Google')
 
 #Add a feature group to the map to store the drawn objects
 
