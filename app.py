@@ -53,27 +53,34 @@ st.write("Discover Soil Content, Water Content, Potential Evapotranspiration, Wa
 
 # Create a Streamlit app and add a map to it
 
-my_map = geemap.Map()
-my_map.centerObject(ee.Geometry.Point(-122.4183, 37.7758), 12)
-my_map.addLayer(ee.Image().paint(ee.Geometry.Point(-122.4183, 37.7758), 10), {}, "Center")
-my_map.setControlVisibility(False)
+# Define a function to retrieve the POI within a given geometry
+def get_poi(geometry):
+    # Create a feature collection with the given geometry
+    feature_collection = ee.FeatureCollection([ee.Feature(geometry)])
+    
+    # Define the POI as a point feature with the mean location of the input geometry
+    poi = feature_collection.reduce(ee.Reducer.mean()).geometry()
+    
+    # Return the POI as a tuple of latitude and longitude
+    return poi.centroid().getInfo()["coordinates"][::-1]
 
-map_id_dict = geemap.Map.getId(my_map)
-map_html = f'<div id="{map_id_dict["mapid"]}" style="width:{my_map.style.get("width")}; height:{my_map.style.get("height")};"></div>'
-ee_map_html = f'<script src="{map_id_dict["ee_api_loader"]}" async></script>{my_map.initializeJavascript()}'
+# Create a Streamlit app and a map
+st.set_page_config(page_title="Selecting POI from the map directly")
+my_map = geemap.Map(center=(37.7758,-122.4183), zoom=12, height="600px")
 
 # Display the map in the Streamlit app
-st.markdown(map_html, unsafe_allow_html=True)
-st.markdown(ee_map_html, unsafe_allow_html=True)
+st.write(my_map.to_streamlit())
 
 # Wait for the user to draw a feature on the map
-st.write("Draw a point of interest on the map")
-if my_map.wait_for_click():
-    # Get the drawn feature and convert it to a FeatureCollection
-    feature = ee.Feature(ee.Geometry.Point(my_map.ee_click_latlon))
-    poi= ee.FeatureCollection([feature])
-    st.write("Selected point of interest:", feature.getInfo())
-
+st.write("Draw an area of interest on the map")
+feature = my_map.draw_last_feature
+if feature is not None:
+    # Extract the geometry of the drawn feature
+    geometry = ee.Geometry(feature.geometry())
+    
+    # Retrieve the POI within the drawn feature
+    poi = get_poi(geometry)
+    st.write("Selected POI:", poi)
 #__________________________Input Parameters________________________
 
 
@@ -208,12 +215,12 @@ my_map.add_child(folium.LayerControl())
 my_map.addLayerControl()
 
 #Header for map
-st.subheader("Google Earth Map")
+#st.subheader("Google Earth Map")
 
 
 
 # Display the map.
-my_map.to_streamlit(height=600,  responsive=True, scrolling=False)
+#my_map.to_streamlit(height=600,  responsive=True, scrolling=False)
 
 
 def local_profile(dataset, poi, buffer):
