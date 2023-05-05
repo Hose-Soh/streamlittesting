@@ -48,7 +48,7 @@ st.write("Discover Soil Content, Water Content, Potential Evapotranspiration, Wa
 #First Map 
 my_map = geemap.Map()
 my_map.draw_features
-my_map.draw_last_features
+my_map.draw_last_feature
 poi = ee.FeatureCollection(my_map.draw_features)
 
 
