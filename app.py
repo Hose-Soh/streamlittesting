@@ -186,6 +186,11 @@ my_map.addLayerControl()
 #Header for map
 st.subheader("Google Earth Map")
 
+#Selecting poi from the map directly
+my_map.draw_features
+my_map.draw_last_feature
+poi = ee.FeatureCollection(my_map.draw_features)
+
 # Display the map.
 my_map.to_streamlit(height=600,  responsive=True, scrolling=False)
 
