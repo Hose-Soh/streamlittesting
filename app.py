@@ -46,7 +46,10 @@ st.title("Explore Soil Characteristics and Hydrological Properties of a Region")
 st.write("Discover Soil Content, Water Content, Potential Evapotranspiration, Water Recharge, Perched Water Level, Precipitation, and Soil Moisture! Enter longitude, latitude, initial date, and final date.")
 
 #First Map 
-
+my_map = geemap.Map()
+my_map.draw_features
+my_map.draw_last_features
+poi = ee.FeatureCollection(my_map.draw_features)
 
 
 
@@ -82,9 +85,9 @@ with form:
 
 
     # Take input from user for lon and lat
-    lon = st.number_input("Enter The Longitude", value=5.145041)
-    lat = st.number_input("Enter The Latitude", value=45.772439)
-    poi = ee.Geometry.Point(lon, lat)
+    # lon = st.number_input("Enter The Longitude", value=5.145041)
+    # lat = st.number_input("Enter The Latitude", value=45.772439)
+    # poi = ee.Geometry.Point(lon, lat)
 
     # A nominal scale in meters of the projection to work in [in meters].
     scale = 1000
@@ -158,8 +161,8 @@ def add_ee_layer(self, ee_image_object, vis_params, name):
     ).add_to(self)
 
 
-# Create a GEE map centered on the location of interest
-my_map = geemap.Map(center=[lat, lon], zoom=3)
+# # Create a GEE map centered on the location of interest
+# my_map = geemap.Map(center=[lat, lon], zoom=3)
 
 # Set visualization parameters.
 vis_params = {
@@ -175,7 +178,7 @@ my_map.addLayer(sand, vis_params, "Sand Content")
 
 # Add a marker at the location of interest.
 # Add a marker at the location of interest.
-folium.Marker([lat, lon], popup="point of interest").add_to(my_map)
+# folium.Marker([lat, lon], popup="point of interest").add_to(my_map)
 # Add a layer control panel to the map.
 my_map.add_child(folium.LayerControl()) 
 
@@ -186,10 +189,7 @@ my_map.addLayerControl()
 #Header for map
 st.subheader("Google Earth Map")
 
-#Selecting poi from the map directly
-my_map.draw_features
-my_map.draw_last_feature
-poi = ee.FeatureCollection(my_map.draw_features)
+
 
 # Display the map.
 my_map.to_streamlit(height=600,  responsive=True, scrolling=False)
