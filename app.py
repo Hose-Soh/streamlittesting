@@ -53,6 +53,14 @@ st.write("Discover Soil Content, Water Content, Potential Evapotranspiration, Wa
 
 # Create a Streamlit app and add a map to it
 
+# Declare a variable to store the POI
+poi = None
+
+# Define a function to update the POI variable with the POI within a given geometry
+def update_poi(geometry):
+    global poi
+    poi = get_poi(geometry)
+
 # Define a function to retrieve the POI within a given geometry
 def get_poi(geometry):
     # Create a feature collection with the given geometry
@@ -74,13 +82,18 @@ my_map.to_streamlit(height=600,  responsive=True, scrolling=False)
 # Wait for the user to draw a feature on the map
 st.write("Draw an area of interest on the map")
 feature = my_map.draw_last_feature
+
 if feature is not None:
     # Extract the geometry of the drawn feature
     geometry = ee.Geometry(feature.geometry())
     
-    # Retrieve the POI within the drawn feature
-    poi = get_poi(geometry)
+    # Update the POI variable with the POI within the drawn feature
+    update_poi(geometry)
+
+# Display the selected POI in the app
+if poi is not None:
     st.write("Selected POI:", poi)
+    
 #__________________________Input Parameters________________________
 
 
