@@ -46,136 +46,7 @@ st.title("Explore Soil Characteristics and Hydrological Properties of a Region")
 st.write("Discover Soil Content, Water Content, Potential Evapotranspiration, Water Recharge, Perched Water Level, Precipitation, and Soil Moisture! Enter longitude, latitude, initial date, and final date.")
 
 #First Map 
-#Create a map centered on a specific location, with Google Maps tiles
 
-m = folium.Map(location=[37.7749, -122.4194], zoom_start=12, tiles='https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}' , attr='Google')
-
-#Add a feature group to the map to store the drawn objects
-
-drawn_items = folium.FeatureGroup(name='Drawn Items')
-m.add_child(drawn_items)
-
-#Add a button to toggle the drawing toolbar on and off
-
-folium.plugins.Draw(export=True).add_to(m)
-
-#Define a function to handle the point of interest selection
-
-def handle_poi_selection(e):
-    poi = e['geometry']
-    st.write("Point of interest:", poi)
-
-#Add a listener to handle drawn objects
-
-# add a GeoJSON layer to show the drawn objects
-# if len(drawn_items) > 0:
-#     folium.GeoJson(
-#         data={
-#             "type": "FeatureCollection",
-#             "features": drawn_items
-#         },
-#         name='Drawn Items',
-#         style_function=lambda x: {'color': 'red', 'opacity': 1},
-#         overlay=True,
-#         control=False,
-#     ).add_to(map_obj)
-
-
-#Add listeners to the map for point and polygon creation events
-
-folium.plugins.Draw(
-export=True,
-draw_options={
-'rectangle': {'repeatMode': True},
-'polyline': {'showMeasurements': True},
-'polygon': {'showArea': True},
-'circle': False,
-'marker': False
-},
-edit_options={
-'featureGroup': drawn_items
-}
-).add_to(m)
-m.add_child(folium.plugins.FeatureGroupSubGroup(drawn_items, 'Drawn Items'))
-m.add_child(folium.plugins.Draw(export=True, edit=True, delete=True))
-
-#Add a listener to handle POI selection
-
-m.add_child(folium.plugins.FeatureGroupSubGroup(drawn_items, 'Drawn Items')).add_child(folium.plugins.MeasureControl()).add_child(
-folium.plugins.Geocoder()).add_child(folium.plugins.MousePosition()).add_child(folium.plugins.Fullscreen()).add_child(
-folium.plugins.LocateControl()).add_child(folium.plugins.Search()).add_child(folium.plugins.ScrollZoomToggler()).add_child(
-folium.plugins.MiniMap()).add_child(folium.plugins.FeatureGroupSubGroup(drawn_items, 'Drawn Items')).add_child(
-folium.plugins.GeoJsonPopup(
-fields=['name'],
-aliases=['Name'],
-localize=True,
-style='background-color: yellow;',
-labels=True,
-sticky=False,
-)
-).add_child(
-folium.plugins.GeoJsonTooltip(
-fields=['name'],
-aliases=['Name'],
-localize=True,
-labels=True,
-sticky=False,
-)
-).add_child(
-folium.plugins.GeoJson(
-data=None,
-name='Selected Item',
-style_function=lambda x: {'color': 'yellow', 'opacity': 1},
-control=False,
-overlay=False,
-)
-).add_child(
-folium.plugins.Search(
-layer=drawn_items,
-geom_type='Point',
-placeholder='Search for POI',
-search_label='name',
-weight=3,
-position='topleft'
-)
-).add_child(
-folium.plugins.Search(
-layer=drawn_items,
-geom_type='Polygon',
-placeholder='Search for POI',
-search_label='name',
-weight=3,
-position='topleft'
-)
-)
-
-#Create a Streamlit component to display the map
-
-folium_static = st.components.v1.html(
-f'<div id="map">{m.repr_html()}</div>',
-height=500
-)
-
-
-
-
-# shape the map
-st.markdown(
-        f"""
-<style>
-    .appview-container .main .block-container{{
-
-        padding-top: {3}rem;
-        padding-right: {2}rem;
-        padding-left: {0}rem;
-        padding-bottom: {0}rem;
-    }}
-
-
-</style>
-""",
-        unsafe_allow_html=True,
-    )
 
 
 
@@ -306,7 +177,7 @@ my_map.addLayer(sand, vis_params, "Sand Content")
 # Add a marker at the location of interest.
 folium.Marker([lat, lon], popup="point of interest").add_to(my_map)
 # Add a layer control panel to the map.
-my_map.add_child(folium.LayerControl())
+my_map.add_child(folium.LayerControl()) 
 
 
 # Add a layer control panel to the map.
