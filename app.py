@@ -69,6 +69,7 @@ def handle_poi_selection(e):
 
 # Add a GeoJSON layer to show the drawn objects
 folium.GeoJson(
+    data=None,
     name='Drawn Items',
     style_function=lambda x: {'color': 'red', 'opacity': 1},
     overlay=True,
