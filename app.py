@@ -52,7 +52,7 @@ st.write("Discover Soil Content, Water Content, Potential Evapotranspiration, Wa
 # poi = ee.FeatureCollection(my_map.draw_features)
 
 # Create a Streamlit app and add a map to it
-st.set_page_config(page_title="Selecting POI from the map directly")
+
 ee_map = ee.Map()
 ee_map.centerObject(ee.Geometry.Point(-122.4183, 37.7758), 12)
 ee_map.addLayer(ee.Image().paint(ee.Geometry.Point(-122.4183, 37.7758), 10), {}, "Center")
