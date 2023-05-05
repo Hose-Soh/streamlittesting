@@ -68,16 +68,17 @@ def handle_poi_selection(e):
 #Add a listener to handle drawn objects
 
 # add a GeoJSON layer to show the drawn objects
-folium.GeoJson(
-    data={
-        "type": "FeatureCollection",
-        "features": []
-    },
-    name='Drawn Items',
-    style_function=lambda x: {'color': 'red', 'opacity': 1},
-    overlay=True,
-    control=False,
-).add_to(drawn_items).add_child(folium.features.LatLngPopup())
+if len(drawn_items) > 0:
+    folium.GeoJson(
+        data={
+            "type": "FeatureCollection",
+            "features": drawn_items
+        },
+        name='Drawn Items',
+        style_function=lambda x: {'color': 'red', 'opacity': 1},
+        overlay=True,
+        control=False,
+    ).add_to(map_obj)
 
 
 #Add listeners to the map for point and polygon creation events
