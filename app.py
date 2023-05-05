@@ -1,3 +1,12 @@
+#_________________________Importing Libraries______________________
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+import folium
+import pprint
+import branca.colormap as cm
+
 import json
 from datetime import datetime, timedelta, date
 
@@ -162,14 +171,7 @@ st.markdown(
         unsafe_allow_html=True,
     )
 
-#_________________________Importing Libraries______________________
 
-import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-import folium
-import pprint
-import branca.colormap as cm
 
 #__________________________Input Parameters________________________
 
