@@ -67,13 +67,13 @@ def handle_poi_selection(e):
 
 #Add a listener to handle drawn objects
 
+# Add a GeoJSON layer to show the drawn objects
 folium.GeoJson(
-name='Drawn Items',
-style_function=lambda x: {'color': 'red', 'opacity': 1},
-overlay=True,
-control=False,
-add_to=m,
-).add_child(folium.features.LatLngPopup())
+    name='Drawn Items',
+    style_function=lambda x: {'color': 'red', 'opacity': 1},
+    overlay=True,
+    control=False,
+).add_to(drawn_items).add_child(folium.features.LatLngPopup())
 
 #Add listeners to the map for point and polygon creation events
 
