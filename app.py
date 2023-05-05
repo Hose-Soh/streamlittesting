@@ -53,14 +53,14 @@ st.write("Discover Soil Content, Water Content, Potential Evapotranspiration, Wa
 
 # Create a Streamlit app and add a map to it
 
-ee_map = ee.Map()
-ee_map.centerObject(ee.Geometry.Point(-122.4183, 37.7758), 12)
-ee_map.addLayer(ee.Image().paint(ee.Geometry.Point(-122.4183, 37.7758), 10), {}, "Center")
-ee_map.setControlVisibility(False)
-ee_map.style.set(width="100%", height="600px")
-map_id_dict = ee.Map.getId(ee_map)
-map_html = f'<div id="{map_id_dict["mapid"]}" style="width:{ee_map.style.get("width")}; height:{ee_map.style.get("height")};"></div>'
-ee_map_html = f'<script src="{map_id_dict["ee_api_loader"]}" async></script>{ee_map.initializeJavascript()}'
+my_map = geemap.Map()
+my_map.centerObject(ee.Geometry.Point(-122.4183, 37.7758), 12)
+my_map.addLayer(ee.Image().paint(ee.Geometry.Point(-122.4183, 37.7758), 10), {}, "Center")
+my_map.setControlVisibility(False)
+my_map.style.set(width="100%", height="600px")
+map_id_dict = ee.Map.getId(my_map)
+map_html = f'<div id="{map_id_dict["mapid"]}" style="width:{my_map.style.get("width")}; height:{my_map.style.get("height")};"></div>'
+ee_map_html = f'<script src="{map_id_dict["ee_api_loader"]}" async></script>{my_map.initializeJavascript()}'
 
 # Display the map in the Streamlit app
 st.markdown(map_html, unsafe_allow_html=True)
@@ -68,9 +68,9 @@ st.markdown(ee_map_html, unsafe_allow_html=True)
 
 # Wait for the user to draw a feature on the map
 st.write("Draw a point of interest on the map")
-if ee_map.wait_for_click():
+if my_map.wait_for_click():
     # Get the drawn feature and convert it to a FeatureCollection
-    feature = ee.Feature(ee.Geometry.Point(ee_map.ee_click_latlon))
+    feature = ee.Feature(ee.Geometry.Point(my_map.ee_click_latlon))
     poi= ee.FeatureCollection([feature])
     st.write("Selected point of interest:", feature.getInfo())
 
