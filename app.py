@@ -69,7 +69,7 @@ def get_poi(geometry):
 my_map = geemap.Map(center=(37.7758,-122.4183), zoom=12, height="600px")
 
 # Display the map in the Streamlit app
-st.write(my_map.to_streamlit())
+my_map.to_streamlit(height=600,  responsive=True, scrolling=False)
 
 # Wait for the user to draw a feature on the map
 st.write("Draw an area of interest on the map")
@@ -220,7 +220,7 @@ my_map.addLayerControl()
 
 
 # Display the map.
-#my_map.to_streamlit(height=600,  responsive=True, scrolling=False)
+#
 
 
 def local_profile(dataset, poi, buffer):
