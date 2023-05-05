@@ -65,7 +65,7 @@ def get_poi(geometry):
     return poi.centroid().getInfo()["coordinates"][::-1]
 
 # Create a Streamlit app and a map
-st.set_page_config(page_title="Selecting POI from the map directly")
+
 my_map = geemap.Map(center=(37.7758,-122.4183), zoom=12, height="600px")
 
 # Display the map in the Streamlit app
