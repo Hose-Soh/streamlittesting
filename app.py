@@ -57,7 +57,7 @@ my_map = geemap.Map()
 my_map.centerObject(ee.Geometry.Point(-122.4183, 37.7758), 12)
 my_map.addLayer(ee.Image().paint(ee.Geometry.Point(-122.4183, 37.7758), 10), {}, "Center")
 my_map.setControlVisibility(False)
-my_map.style.set(width="100%", height="600px")
+
 map_id_dict = ee.Map.getId(my_map)
 map_html = f'<div id="{map_id_dict["mapid"]}" style="width:{my_map.style.get("width")}; height:{my_map.style.get("height")};"></div>'
 ee_map_html = f'<script src="{map_id_dict["ee_api_loader"]}" async></script>{my_map.initializeJavascript()}'
