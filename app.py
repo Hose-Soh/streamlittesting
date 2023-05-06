@@ -235,11 +235,12 @@ st.write(
 )
 
 st.pyplot(
-    ui_visuals.generate_hydraulic_props_chart(
-        profile_wp, profile_fc, olm_bands, olm_depths
-    )
+    
 )
-
+ # Display the chart
+st.plotly_chart(ui_visuals.generate_hydraulic_props_chart(
+        profile_wp, profile_fc, olm_bands, olm_depths
+    ), use_container_width=True)
 
 # _____________________________________________Getting Meteorological Datasets_____________________________________________
 meteo = met_properties.get_meteorological_for_poi(poi, scale, i_date, f_date)
