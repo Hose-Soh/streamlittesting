@@ -30,7 +30,8 @@ st.set_page_config(page_title='Streamlit Map Drawing Example')
 
 
 m = geemap.Map()
-
+# Display the map.
+m.to_streamlit(height=600, responsive=True, scrolling=False)
 
 # Get the drawn features from the map
 drawn_features = m.draw_features
@@ -51,6 +52,14 @@ def draw_feature_on_map(geometry):
         coords = geometry.coordinates().get(0).getInfo()
         for coord in coords:
             st.write(coord)
+
+        # Create an Earth Engine Geometry object
+        ee_geometry = geemap.geopandas_to_ee(coords)
+        # Create a new layer for the drawn geometry
+        drawn_layer = geemap.ee_tile_layer(ee_geometry, {}, 'Drawn Geometry')
+        # Add the layer to the map
+        m.add_layer(drawn_layer)
+
     elif geometry.type().getInfo() == 'LineString':
         # For lines, extract the coordinates
         coords = geometry.coordinates().getInfo()
