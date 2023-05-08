@@ -51,8 +51,12 @@ draw_control = Draw(export=True)
 draw_control.add_to(Map)
 st.write(draw_control)
 
-#Map.to_streamlit(height=600, responsive=True, scrolling=False)      
-st.pydeck_chart(Map.to_pydeck(), use_container_width=True)
+# Convert the Folium map to HTML
+map_html = Map._repr_html_()
+
+# Display the map in Streamlit app
+st.pydeck_chart(map_html)
+
 
 
 
