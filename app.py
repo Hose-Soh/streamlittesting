@@ -75,7 +75,7 @@ def get_poi(geometry):
 
 # Create a Streamlit app and a map
 
-my_map = folium.Map(center=(37.7758,-122.4183), zoom=12)
+my_map = folium.Map(center=(37.7758,-122.4183))
 # Add the Inspector control to the map
 draw_control = Draw(export=True)
 draw_control.add_to(my_map)
