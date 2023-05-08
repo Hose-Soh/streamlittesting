@@ -47,21 +47,21 @@ else:
     st.write("No features have been drawn yet.")
 
 # Define a function to draw the feature on the map
-def draw_feature_on_map(geometry):
+def draw_feature_on_map(x):
     # Extract the coordinates based on the geometry type
-    if geometry.type().getInfo() == 'Polygon':
+    if x.type().getInfo() == 'Polygon':
     # For polygons, extract the exterior coordinates
-        coords = geometry.coordinates().get(0).getInfo()
+        coords = x.coordinates().get(0).getInfo()
         for coord in coords:
             print(coord)
-    elif geometry.type().getInfo() == 'LineString':
+    elif x.type().getInfo() == 'LineString':
         # For lines, extract the coordinates
-        coords = geometry.coordinates().getInfo()
+        coords = x.coordinates().getInfo()
         for coord in coords:
             print(coord)
-    elif geometry.type().getInfo() == 'Point':
+    elif x.type().getInfo() == 'Point':
         # For points, extract the coordinates
-        coords = geometry.coordinates().getInfo()
+        coords = x.coordinates().getInfo()
         print(coords)
     else:
         print("Unsupported geometry type.")
