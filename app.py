@@ -7,6 +7,7 @@ import streamlit as st
 import ipyleaflet
 import folium
 from folium.plugins import Draw
+from streamlit_folium import folium_static
 
 # Data from the downloaded JSON file
 json_data = '''
@@ -51,11 +52,7 @@ draw_control = Draw(export=True)
 draw_control.add_to(Map)
 st.write(draw_control)
 
-# Convert the Folium map to HTML
-map_html = Map._repr_html_()
-
-# Display the map in Streamlit app
-st.pydeck_chart(map_html)
+folium_static(Map)
 
 
 
