@@ -55,14 +55,17 @@ st.write(draw_control)
 
 folium_static(Map)
 
-# Retrieve the drawn features
-features = draw_control.last_draw['geometry']['coordinates']
+# Create a Streamlit button to capture the drawn features
+if st.button("Capture Drawn Features"):
+    drawn_features = draw_control.json_data
+    features = drawn_features["features"]
 
-# Extract the coordinates from the features
-roi = Polygon(features[0])
+    # Extract the coordinates from the features
+    coordinates = features[0]["geometry"]["coordinates"][0]
+    roi = Polygon(coordinates)
 
-# Print the coordinates of the drawn region
-st.write("Coordinates of the drawn region:", roi)
+    # Print the coordinates of the drawn region
+    st.write("Coordinates of the drawn region:", roi)
 
 
 
