@@ -37,6 +37,8 @@ m.to_streamlit(height=600, responsive=True, scrolling=False)
 drawn_features = m.draw_features
 last_feature = m.draw_last_feature
 
+geometry = 0
+
 if last_feature is not None:
         geometry = last_feature.geometry()
         st.write("Last drawn feature's geometry:", geometry)
