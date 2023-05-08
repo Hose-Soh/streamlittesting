@@ -56,7 +56,7 @@ else:
         st.write("No features have been drawn yet.")
 
 # Define a function to draw the feature on the map
-def draw_feature_on_map():
+def draw_feature_on_map(geometry):
     if geometry.type().getInfo() == 'Polygon':
         # For polygons, extract the exterior coordinates
         coords = geometry.coordinates().get(0).getInfo()
