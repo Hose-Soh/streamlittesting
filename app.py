@@ -42,6 +42,8 @@ st.set_page_config(page_title='Streamlit Map Drawing Example')
 
 
 m = geemap.Map()
+# Display the map.
+m.to_streamlit(height=600, responsive=True, scrolling=False)
 
 # Get the drawn features from the map
 drawn_features = m.draw_features
@@ -76,5 +78,4 @@ def draw_feature_on_map():
 if st.button("Draw Feature"):
     draw_feature_on_map()
 
-# Display the map.
-m.to_streamlit(height=600, responsive=True, scrolling=False)
+
