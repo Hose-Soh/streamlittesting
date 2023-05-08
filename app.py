@@ -47,28 +47,30 @@ else:
 
 # Define a function to draw the feature on the map
 def draw_feature_on_map(geometry):
-    if geometry.geometryType() == 'Polygon':
-        # For polygons, extract the exterior coordinates
-        coords = geometry.coordinates().get(0).getInfo()
-        for coord in coords:
-            st.write(coord)
-        # Create an Earth Engine Geometry object
-        ee_geometry = geemap.geopandas_to_ee(coords)
-        # Create a new layer for the drawn geometry
-        drawn_layer = geemap.ee_tile_layer(ee_geometry, {}, 'Drawn Geometry')
-        # Add the layer to the map
-        m.add_layer(drawn_layer)
-    elif geometry.geometryType() == 'LineString':
-        # For lines, extract the coordinates
-        coords = geometry.coordinates().getInfo()
-        for coord in coords:
-            st.write(coord)
-    elif geometry.geometryType() == 'Point':
-        # For points, extract the coordinates
-        coords = geometry.coordinates().getInfo()
-        st.write(coords)
+    if geometry and 'type' in geometry.keys():
+        ee_geometry = geemap.geopandas_to_ee(geometry)
+        if ee_geometry.type().isType('Polygon'):
+            # For polygons, extract the exterior coordinates
+            coords = ee_geometry.coordinates().get(0).getInfo()
+            for coord in coords:
+                st.write(coord)
+            # Create a new layer for the drawn geometry
+            drawn_layer = geemap.ee_tile_layer(ee_geometry, {}, 'Drawn Geometry')
+            # Add the layer to the map
+            m.add_layer(drawn_layer)
+        elif ee_geometry.type().isType('LineString'):
+            # For lines, extract the coordinates
+            coords = ee_geometry.coordinates().getInfo()
+            for coord in coords:
+                st.write(coord)
+        elif ee_geometry.type().isType('Point'):
+            # For points, extract the coordinates
+            coords = ee_geometry.coordinates().getInfo()
+            st.write(coords)
+        else:
+            st.write("Unsupported geometry type.")
     else:
-        st.write("Unsupported geometry type.")
+        st.write("Invalid geometry.")
 
 # Create a button to draw the feature
 if st.button("Draw Feature"):
