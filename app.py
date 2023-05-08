@@ -1,8 +1,8 @@
 #from collections.abc import Mapping
 import json
 import ee
-import geemap
-#import geemap.foliumap as geemap
+#import geemap
+import geemap.foliumap as geemap
 import streamlit as st
 import ipyleaflet
 import folium
