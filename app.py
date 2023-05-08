@@ -41,31 +41,32 @@ ee.Initialize(credentials)
 st.set_page_config(page_title='Streamlit Map Drawing Example')
 
 
+Map = geemap.Map()
 
-Map = folium.Map()
-
-Map = folium.Map()
-folium.plugins.MeasureControl().add_to(Map)
-
-
-# Add the draw control to the map
-draw_control = Draw(export=True)
-draw_control.add_to(Map)
-st.write(draw_control)
-
-folium_static(Map)
-
-# Create a Streamlit button to capture the drawn features
-if st.button("Capture Drawn Features"):
-    drawn_features = draw_control.last_action['geometry']
-    coordinates = drawn_features['coordinates'][0]
-    roi = Polygon(coordinates)
-
-    # Print the coordinates of the drawn region
-    st.write("Coordinates of the drawn region:", roi)
+# Get the drawn features from the map
+drawn_features = Map.draw_features
+last_feature = Map.draw_last_feature
+geometry = last_feature.geometry()
 
 
+# Extract the coordinates based on the geometry type
+if geometry.type().getInfo() == 'Polygon':
+    # For polygons, create an ee.Geometry.Polygon object
+    coords = ee.Geometry.Polygon(geometry.coordinates())
+    Map.addLayer(coords, {'color': '#FF0000'}, 'Polygon')
+elif geometry.type().getInfo() == 'LineString':
+    # For lines, create an ee.Geometry.LineString object
+    coords = ee.Geometry.LineString(geometry.coordinates())
+    Map.addLayer(coords, {'color': '#FF0000'}, 'LineString')
+elif geometry.type().getInfo() == 'Point':
+    # For points, create an ee.Geometry.Point object
+    coords = ee.Geometry.Point(geometry.coordinates())
+    Map.addLayer(coords, {'color': '#FF0000'}, 'Point')
+else:
+    print("Unsupported geometry type.")
 
+# Display the map in Streamlit
+st_geemap = geemap.to_streamlit(Map)
+st_geemap.render()
 
-
-
+st.write("Poi is :", coords)
