@@ -37,13 +37,13 @@ m.to_streamlit(height=600, responsive=True, scrolling=False)
 drawn_features = m.draw_features
 last_feature = m.draw_last_feature
 
-geometry = 0
+geometry = last_feature.geometry()
 
-if last_feature is not None:
-        geometry = last_feature.geometry()
-        st.write("Last drawn feature's geometry:", geometry)
-else:
-        st.write("No features have been drawn yet.")
+# if last_feature is not None:
+#         geometry = last_feature.geometry()
+#         st.write("Last drawn feature's geometry:", geometry)
+# else:
+#         st.write("No features have been drawn yet.")
 
 # Define a function to draw the feature on the map
 def draw_feature_on_map(geometry):
