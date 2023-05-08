@@ -74,8 +74,6 @@ def draw_feature_on_map(geometry):
     else:
         st.write("Unsupported geometry type.")
 
-# Create a button to draw the feature
-if st.button("Draw Feature"):
-    draw_feature_on_map()
+
 
 
