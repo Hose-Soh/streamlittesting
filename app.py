@@ -49,27 +49,28 @@ last_feature = Map.draw_last_feature
 geometry = last_feature.geometry()
 
 
-# Extract the coordinates based on the geometry type
-if geometry.type().getInfo() == 'Polygon':
-    # For polygons, extract the exterior coordinates
-    coords = geometry.coordinates().get(0).getInfo()
-    for coord in coords:
-        print(coord)
-elif geometry.type().getInfo() == 'LineString':
-    # For lines, extract the coordinates
-    coords = geometry.coordinates().getInfo()
-    for coord in coords:
-        print(coord)
-elif geometry.type().getInfo() == 'Point':
-    # For points, extract the coordinates
-    coords = geometry.coordinates().getInfo()
-    print(coords)
-else:
-    print("Unsupported geometry type.")
+# Define a function to draw the feature on the map
+def draw_feature_on_map():
+    if geometry.type().getInfo() == 'Polygon':
+        # For polygons, extract the exterior coordinates
+        coords = geometry.coordinates().get(0).getInfo()
+        for coord in coords:
+            st.write(coord)
+    elif geometry.type().getInfo() == 'LineString':
+        # For lines, extract the coordinates
+        coords = geometry.coordinates().getInfo()
+        for coord in coords:
+            st.write(coord)
+    elif geometry.type().getInfo() == 'Point':
+        # For points, extract the coordinates
+        coords = geometry.coordinates().getInfo()
+        st.write(coords)
+    else:
+        st.write("Unsupported geometry type.")
 
-    
-# Display the map in Streamlit
-st_geemap = geemap.to_streamlit(Map)
-st_geemap.render()
+# Create a button to draw the feature
+if st.button("Draw Feature"):
+    draw_feature_on_map()
 
-st.write("Poi is :", coords)
+# Display the map.
+Map.to_streamlit(height=600, responsive=True, scrolling=False)
