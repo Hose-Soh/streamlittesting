@@ -8,6 +8,7 @@ import ipyleaflet
 import folium
 from folium.plugins import Draw
 from streamlit_folium import folium_static
+from shapely.geometry import Polygon
 
 # Data from the downloaded JSON file
 json_data = '''
@@ -54,7 +55,14 @@ st.write(draw_control)
 
 folium_static(Map)
 
+# Retrieve the drawn features
+features = draw_control.last_draw['geometry']['coordinates']
 
+# Extract the coordinates from the features
+roi = Polygon(features[0])
+
+# Print the coordinates of the drawn region
+st.write("Coordinates of the drawn region:", roi)
 
 
 
