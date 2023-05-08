@@ -74,6 +74,6 @@ def draw_feature_on_map(geometry):
     else:
         st.write("Unsupported geometry type.")
 
-
+draw_feature_on_map(geometry) 
 
 
