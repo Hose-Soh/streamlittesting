@@ -41,11 +41,11 @@ ee.Initialize(credentials)
 st.set_page_config(page_title='Streamlit Map Drawing Example')
 
 
-Map = geemap.Map()
+m = geemap.Map()
 
 # Get the drawn features from the map
-drawn_features = Map.draw_features
-last_feature = Map.draw_last_feature
+drawn_features = m.draw_features
+last_feature = m.draw_last_feature
 geometry = last_feature.geometry()
 
 
@@ -73,4 +73,4 @@ if st.button("Draw Feature"):
     draw_feature_on_map()
 
 # Display the map.
-Map.to_streamlit(height=600, responsive=True, scrolling=False)
+m.to_streamlit(height=600, responsive=True, scrolling=False)
