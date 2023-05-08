@@ -8,7 +8,7 @@ import ipyleaflet
 import folium
 from folium.plugins import Draw
 from streamlit_folium import folium_static
-from shapely.geometry import Polygon
+from shapely.geometry import Polygon, LineString, Point
 
 # Data from the downloaded JSON file
 json_data = '''
@@ -51,20 +51,23 @@ geometry = last_feature.geometry()
 
 # Extract the coordinates based on the geometry type
 if geometry.type().getInfo() == 'Polygon':
-    # For polygons, create an ee.Geometry.Polygon object
-    coords = ee.Geometry.Polygon(geometry.coordinates())
-    Map.addLayer(coords, {'color': '#FF0000'}, 'Polygon')
+    # For polygons, extract the exterior coordinates
+    coords = geometry.coordinates().get(0).getInfo()
+    for coord in coords:
+        print(coord)
 elif geometry.type().getInfo() == 'LineString':
-    # For lines, create an ee.Geometry.LineString object
-    coords = ee.Geometry.LineString(geometry.coordinates())
-    Map.addLayer(coords, {'color': '#FF0000'}, 'LineString')
+    # For lines, extract the coordinates
+    coords = geometry.coordinates().getInfo()
+    for coord in coords:
+        print(coord)
 elif geometry.type().getInfo() == 'Point':
-    # For points, create an ee.Geometry.Point object
-    coords = ee.Geometry.Point(geometry.coordinates())
-    Map.addLayer(coords, {'color': '#FF0000'}, 'Point')
+    # For points, extract the coordinates
+    coords = geometry.coordinates().getInfo()
+    print(coords)
 else:
     print("Unsupported geometry type.")
 
+    
 # Display the map in Streamlit
 st_geemap = geemap.to_streamlit(Map)
 st_geemap.render()
