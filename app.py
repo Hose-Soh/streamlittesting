@@ -47,25 +47,23 @@ else:
 
 # Define a function to draw the feature on the map
 def draw_feature_on_map(geometry):
-    if geometry.type().getInfo() == 'Polygon':
+    if geometry.geometryType() == 'Polygon':
         # For polygons, extract the exterior coordinates
         coords = geometry.coordinates().get(0).getInfo()
         for coord in coords:
             st.write(coord)
-
         # Create an Earth Engine Geometry object
         ee_geometry = geemap.geopandas_to_ee(coords)
         # Create a new layer for the drawn geometry
         drawn_layer = geemap.ee_tile_layer(ee_geometry, {}, 'Drawn Geometry')
         # Add the layer to the map
         m.add_layer(drawn_layer)
-
-    elif geometry.type().getInfo() == 'LineString':
+    elif geometry.geometryType() == 'LineString':
         # For lines, extract the coordinates
         coords = geometry.coordinates().getInfo()
         for coord in coords:
             st.write(coord)
-    elif geometry.type().getInfo() == 'Point':
+    elif geometry.geometryType() == 'Point':
         # For points, extract the coordinates
         coords = geometry.coordinates().getInfo()
         st.write(coords)
@@ -78,4 +76,4 @@ if st.button("Draw Feature"):
 
 
 # Display the map.
-m.to_streamlit(height=600, responsive=True, scrolling=False)
+#m.to_streamlit(height=600, responsive=True, scrolling=False)
