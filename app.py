@@ -150,6 +150,7 @@ my_map = geemap.Map(
     center=[lat, lon],
     zoom=3,
     Draw_export=True,
+    add_inspector=True
 )
 
 # Set visualization parameters.
