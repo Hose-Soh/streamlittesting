@@ -32,7 +32,7 @@ st.set_page_config(page_title='Streamlit Map Drawing Example')
 m = geemap.Map()
 # Display the map.
 # Display the map
-folium_static(m, height=600, width='100%')
+folium_static(m)
 
 # Get the drawn features from the map
 drawn_features = m.draw_features
