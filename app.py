@@ -132,6 +132,7 @@ with form:
         
         if isinstance(parsed_list, list):
             if len(parsed_list) == 1:
+                global coords_user
                 coords_user = convert_to_point(parsed_list[0])
             elif len(parsed_list) > 1:
                 coords_user = convert_to_polygon(parsed_list)
