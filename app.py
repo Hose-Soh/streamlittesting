@@ -78,7 +78,6 @@ import branca.colormap as cm
 
 # __________________________Input Parameters________________________
 
-roi = None
 
 # Show the code in the sidebar
 with st.sidebar:
@@ -167,48 +166,48 @@ with form:
 
 
 
-#Check if anything was drawn on the map
-if last_feature is not None:
+# #Check if anything was drawn on the map
+# if last_feature is not None:
     
-    geometry = last_feature.geometry()
+#     geometry = last_feature.geometry()
     
-    # Extract the coordinates based on the geometry type
-    if geometry.type().getInfo() == 'Polygon':
-        # For polygons, extract the exterior coordinates
-        coords = geometry.coordinates().get(0).getInfo()
-        for coord in coords:
-            print(coord)
-    elif geometry.type().getInfo() == 'LineString':
-        # For lines, extract the coordinates
-        coords = geometry.coordinates().getInfo()
-        for coord in coords:
-            print(coord)
-    elif geometry.type().getInfo() == 'Point':
-        # For points, extract the coordinates
-        coords = geometry.coordinates().getInfo()
-        print(coords)
-    else:
-        print("Unsupported geometry type.")
+#     # Extract the coordinates based on the geometry type
+#     if geometry.type().getInfo() == 'Polygon':
+#         # For polygons, extract the exterior coordinates
+#         coords = geometry.coordinates().get(0).getInfo()
+#         for coord in coords:
+#             print(coord)
+#     elif geometry.type().getInfo() == 'LineString':
+#         # For lines, extract the coordinates
+#         coords = geometry.coordinates().getInfo()
+#         for coord in coords:
+#             print(coord)
+#     elif geometry.type().getInfo() == 'Point':
+#         # For points, extract the coordinates
+#         coords = geometry.coordinates().getInfo()
+#         print(coords)
+#     else:
+#         print("Unsupported geometry type.")
     
-    #Checking if coords variable is polygon or point. If polygon make a unique list
-    if isinstance(coords, list) and all(isinstance(coord, list) for coord in coords):
-        # Create a set to store unique coordinates
-        unique_coords = set()
+#     #Checking if coords variable is polygon or point. If polygon make a unique list
+#     if isinstance(coords, list) and all(isinstance(coord, list) for coord in coords):
+#         # Create a set to store unique coordinates
+#         unique_coords = set()
 
-        # Iterate over the coordinates and add them to the set
-        for coord in coords:
-            unique_coords.add(tuple(coord))
+#         # Iterate over the coordinates and add them to the set
+#         for coord in coords:
+#             unique_coords.add(tuple(coord))
 
-        # Convert the set back to a list of lists
-        roi_coords = [list(coord) for coord in unique_coords]
-        print(roi_coords)
-        # Take input from user for lon and lat
-        roi = ee.Geometry.Polygon(roi_coords)
-        print(type(roi))
-    else:
-        roi_coords = coords
-        print(roi_coords)
-        roi = ee.Geometry.Point(roi_coords)
+#         # Convert the set back to a list of lists
+#         roi_coords = [list(coord) for coord in unique_coords]
+#         print(roi_coords)
+#         # Take input from user for lon and lat
+#         roi = ee.Geometry.Polygon(roi_coords)
+#         print(type(roi))
+#     else:
+#         roi_coords = coords
+#         print(roi_coords)
+#         roi = ee.Geometry.Point(roi_coords)
         
 
 
