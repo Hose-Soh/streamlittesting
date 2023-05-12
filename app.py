@@ -217,7 +217,7 @@ polygonBounds = roi.bounds()
 # Display the polygon bounds on the map
 bounds_style = {'color': 'red'}
 bounds_layer = geemap.ee_tile_layer(polygonBounds, bounds_style, 'Region of Interest')
-my_map.add_layer(bounds_layer)
+my_map.addLayer(bounds_layer)
 # Display the map
 my_map.addLayerControl()
 
