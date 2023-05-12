@@ -211,12 +211,12 @@ with form:
         
 
 
-#Add a layer of the selected region on the map
-polygonBounds = roi.bounds()
-# Display the polygon bounds on the map
-bounds_style = {'color': 'red'}
-bounds_layer = geemap.ee_tile_layer(polygonBounds, bounds_style, 'Region of Interest')
-my_map.add_layer(bounds_layer)
+# #Add a layer of the selected region on the map
+# polygonBounds = roi.bounds()
+# # Display the polygon bounds on the map
+# bounds_style = {'color': 'red'}
+# bounds_layer = geemap.ee_tile_layer(polygonBounds, bounds_style, 'Region of Interest')
+# my_map.add_layer(bounds_layer)
 # Display the map
 my_map.addLayerControl()
 
