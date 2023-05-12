@@ -78,6 +78,8 @@ import branca.colormap as cm
 
 # __________________________Input Parameters________________________
 
+
+
 # Show the code in the sidebar
 with st.sidebar:
     # Create two columns
@@ -104,6 +106,7 @@ def convert_to_polygon(coordinates):
     This function return a list of lists as a ee.geometry.Polygon object
     '''
     return ee.Geometry.Polygon(coordinates)
+
 
 with form:
     # Define the date range slider
@@ -135,6 +138,7 @@ with form:
                 global coords_user
                 coords_user = convert_to_point(parsed_list[0])
             elif len(parsed_list) > 1:
+                
                 coords_user = convert_to_polygon(parsed_list)
             else:
                 st.write("Invalid input. Please enter a non-empty list.")
