@@ -42,7 +42,7 @@ def get_soil_prop(soil_type):
 
     return dataset
 
-def local_profile(dataset, roi, buffer, olm_bands, file_name):
+def get_local_soil_profile_at_poi(dataset, roi, buffer, olm_bands, file_name):
     # # Soil depths [in cm] where we have data.
     # olm_depths = [0, 10, 30, 60, 100, 200]
 
