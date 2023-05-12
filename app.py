@@ -144,8 +144,9 @@ with form:
         
         if isinstance(parsed_list, list):
             if len(parsed_list) == 1:
-                global coords_user
+                
                 coords_user = convert_to_point(parsed_list[0])
+                global roi
                 roi = coords_user
             elif len(parsed_list) > 1:
                 
