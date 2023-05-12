@@ -112,6 +112,12 @@ my_map = geemap.Map(
     Draw_export=True,
 )
 
+# Header for map
+st.subheader("Google Earth Map")
+
+# Display the map.
+my_map.to_streamlit(height=600, responsive=True, scrolling=False)
+
 # Get the drawn features from the map
 drawn_features = my_map.draw_features
 # Get the last drawn feature from the map
@@ -261,11 +267,7 @@ my_map.add_child(folium.LayerControl())
 my_map.addLayerControl()
 
 
-# Header for map
-st.subheader("Google Earth Map")
 
-# Display the map.
-my_map.to_streamlit(height=600, responsive=True, scrolling=False)
 
 # Obtain the Soil Profiles at the point
 profile_sand = soil_properties.get_local_soil_profile_at_poi(
