@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import plotly.graph_objects as go
 
 '''
     Contains  set of functions that generate visualisations used in the applicaiton
@@ -148,44 +147,70 @@ def generate_hydraulic_props_chart(profile_wp, profile_fc, olm_bands, olm_depths
     return fig
 
 def generate(profile_sand, profile_clay, profile_orgc, olm_bands, olm_depths):
+    # Data visualization in the form of a bar plot.
     # Create the plot
-    fig = go
+    fig, ax = plt.subplots(figsize=(15, 6))
+    ax.axes.get_yaxis().set_visible(False)
 
-    # Bar plot representing the sand content profile
-    fig.add_trace(go.Bar(
-        x=list(profile_sand.keys()),
-        y=[round(100 * s, 2) for s in profile_sand.values()],
-        name='Sand',
-        marker_color='#ecebbd'
-    ))
+    # Definition of label locations.
+    x = np.arange(len(olm_bands))
 
-    # Bar plot representing the clay content profile
-    fig.add_trace(go.Bar(
-        x=list(profile_clay.keys()),
-        y=[round(100 * c, 2) for c in profile_clay.values()],
-        name='Clay',
-        marker_color='#6f6c5d'
-    ))
+    # Definition of the bar width.
+    width = 0.25
 
-    # Bar plot representing the organic carbon content profile
-    fig.add_trace(go.Bar(
-        x=list(profile_orgc.keys()),
-        y=[round(100 * o, 2) for o in profile_orgc.values()],
-        name='Organic Carbon',
-        marker_color='black',
-        opacity=0.75
-    ))
-
-    # Update layout
-    fig.update_layout(
-        title="Properties of the soil at different depths (mass content)",
-        xaxis_title="Depth",
-        yaxis_title="Content (%)",
-        xaxis_tickangle=-45,
-        showlegend=True,
-        legend=dict(x=0.5, y=-0.15, xanchor='center', yanchor='top', orientation='h'),
-        barmode='group'
+    # Bar plot representing the sand content profile.
+    rect1 = ax.bar(
+        x - width,
+        [round(100 * profile_sand[b], 2) for b in olm_bands],
+        width,
+        label="Sand",
+        color="#ecebbd",
     )
 
+    # Bar plot representing the clay content profile.
+    rect2 = ax.bar(
+        x,
+        [round(100 * profile_clay[b], 2) for b in olm_bands],
+        width,
+        label="Clay",
+        color="#6f6c5d",
+    )
+
+    # Bar plot representing the organic carbon content profile.
+    rect3 = ax.bar(
+        x + width,
+        [round(100 * profile_orgc[b], 2) for b in olm_bands],
+        width,
+        label="Organic Carbon",
+        color="black",
+        alpha=0.75,
+    )
+
+
+    # Application of the function to each barplot.
+    autolabel_soil_prop(ax, rect1)
+    autolabel_soil_prop(ax, rect2)
+    autolabel_soil_prop(ax, rect3)
+
+    # Title of the plot.
+    ax.set_title("Properties of the soil at different depths (mass content)", fontsize=14)
+
+    # Properties of x/y labels and ticks.
+    ax.set_xticks(x)
+    x_labels = [str(d) + " cm" for d in olm_depths]
+    ax.set_xticklabels(x_labels, rotation=45, fontsize=10)
+
+    ax.spines["left"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["top"].set_visible(False)
+
+    # Shrink current axis's height by 10% on the bottom.
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0 + box.height * 0.1, box.width, box.height * 0.9])
+
+    # Add a legend below current axis.
+    ax.legend(
+        loc="upper center", bbox_to_anchor=(0.5, -0.15), fancybox=True, shadow=True, ncol=3
+    )
 
     return fig
