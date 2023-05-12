@@ -149,7 +149,7 @@ def generate_hydraulic_props_chart(profile_wp, profile_fc, olm_bands, olm_depths
 
 def generate(profile_sand, profile_clay, profile_orgc, olm_bands, olm_depths):
     # Create the plot
-    fig = go.Figure()
+    fig = go
 
     # Bar plot representing the sand content profile
     fig.add_trace(go.Bar(
