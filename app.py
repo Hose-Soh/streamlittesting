@@ -78,7 +78,7 @@ import branca.colormap as cm
 
 # __________________________Input Parameters________________________
 
-
+roi = None
 
 # Show the code in the sidebar
 with st.sidebar:
@@ -107,6 +107,16 @@ def convert_to_polygon(coordinates):
     '''
     return ee.Geometry.Polygon(coordinates)
 
+# Create a GEE map centered on the location of interest
+my_map = geemap.Map(
+    zoom=3,
+    Draw_export=True,
+)
+
+# Get the drawn features from the map
+drawn_features = my_map.draw_features
+# Get the last drawn feature from the map
+last_feature = my_map.draw_last_feature
 
 with form:
     # Define the date range slider
@@ -157,17 +167,6 @@ with form:
 
 
 
-# Create a GEE map centered on the location of interest
-my_map = geemap.Map(
-    zoom=3,
-    Draw_export=True,
-)
-
-# Get the drawn features from the map
-drawn_features = my_map.draw_features
-# Get the last drawn feature from the map
-last_feature = my_map.draw_last_feature
-
 #Check if anything was drawn on the map
 if last_feature is not None:
     
@@ -210,6 +209,7 @@ if last_feature is not None:
         roi_coords = coords
         print(roi_coords)
         roi = ee.Geometry.Point(roi_coords)
+        
 
 
 #Add a layer of the selected region on the map
@@ -218,7 +218,6 @@ polygonBounds = roi.bounds()
 bounds_style = {'color': 'red'}
 bounds_layer = geemap.ee_tile_layer(polygonBounds, bounds_style, 'Region of Interest')
 my_map.add_layer(bounds_layer)
-
 # Display the map
 my_map.addLayerControl()
 
