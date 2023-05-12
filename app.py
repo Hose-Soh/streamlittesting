@@ -137,9 +137,11 @@ with form:
             if len(parsed_list) == 1:
                 global coords_user
                 coords_user = convert_to_point(parsed_list[0])
+                roi = coords_user
             elif len(parsed_list) > 1:
                 
                 coords_user = convert_to_polygon(parsed_list)
+                roi = coords_user
             else:
                 st.write("Invalid input. Please enter a non-empty list.")
         else:
@@ -208,8 +210,7 @@ if last_feature is not None:
         roi_coords = coords
         print(roi_coords)
         roi = ee.Geometry.Point(roi_coords)
-else:
-    roi = coords_user
+
 
 #Add a layer of the selected region on the map
 polygonBounds = roi.bounds()
