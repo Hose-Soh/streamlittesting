@@ -260,6 +260,20 @@ my_map.addLayer(sand, vis_params, "Sand Content")
 #folium.Marker(parsed_list, popup="point of interest").add_to(my_map)
 # Create a polygon and add it to the map
 
+# Create a polygon and add it to the map
+polygon = folium.Polygon(locations=parsed_list, popup="Area of interest")
+polygon.add_to(my_map)
+
+# Create a feature group and add the polygon to it
+feature_group = folium.FeatureGroup(name='My Layer')
+feature_group.add_child(polygon)
+
+# Add the feature group to the map
+my_map.add_child(feature_group)
+
+# Add layer control to the map
+folium.LayerControl().add_to(my_map)
+
 # Header for map
 st.subheader("Google Earth Map")
 # Display the map.
