@@ -255,17 +255,19 @@ my_map.addLayer(sand, vis_params, "Sand Content")
 # Add a marker at the location of interest.
 #folium.Marker([lat, lon], popup="point of interest").add_to(my_map)
 # Add a layer control panel to the map.
+# Header for map
+st.subheader("Google Earth Map")
+
+# Display the map.
+my_map.to_streamlit(height=600, responsive=True, scrolling=False)
+
 my_map.add_child(folium.LayerControl())
 
 
 # Add a layer control panel to the map.
 my_map.addLayerControl()
 
-# Header for map
-st.subheader("Google Earth Map")
 
-# Display the map.
-my_map.to_streamlit(height=600, responsive=True, scrolling=False)
 
 
 # Obtain the Soil Profiles at the point
