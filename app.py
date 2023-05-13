@@ -106,17 +106,10 @@ def convert_to_polygon(coordinates):
     '''
     return ee.Geometry.Polygon(coordinates)
 
-# Create a GEE map centered on the location of interest
-my_map = geemap.Map(
-    zoom=3,
-    Draw_export=True,
-)
 
 
-# Get the drawn features from the map
-drawn_features = my_map.draw_features
-# Get the last drawn feature from the map
-last_feature = my_map.draw_last_feature
+
+
 
 with form:
     # Define the date range slider
@@ -166,7 +159,22 @@ with form:
     # button to update visualization
     update_depth = st.form_submit_button("Show Result")
 
+# Create a GEE map centered on the location of interest
+my_map = geemap.Map(
+    zoom=3,
+    Draw_export=True,
+)
 
+# Get the drawn features from the map
+drawn_features = my_map.draw_features
+# Get the last drawn feature from the map
+last_feature = my_map.draw_last_feature
+
+# Create a polygon and add it to the map
+polygon = folium.Polygon(locations=parsed_list, popup="Area of interest")
+polygon.add_to(my_map)
+# Fit the map bounds to the polygon
+my_map.fit_bounds(polygon.get_bounds())
 
 # #Check if anything was drawn on the map
 # if last_feature is not None:
