@@ -301,7 +301,7 @@ orgm = soil_properties.convert_orgc_to_orgm(orgc)
 
 # Organic matter content profile.
 profile_orgm = soil_properties.get_local_soil_profile_at_poi(
-    orgm, roi, scale, olm_bands
+    orgm, roi, scale, olm_bands, "Organic Matter Content.csv"
 )
 
 # Obtain Field Capacity and Wilting Points
@@ -310,10 +310,10 @@ field_capacity, wilting_point = hydro_properties.compute_hyrdo_properties(
 )
 
 profile_wp = soil_properties.get_local_soil_profile_at_poi(
-    wilting_point, roi, scale, olm_bands
+    wilting_point, roi, scale, olm_bands, "Wilting Point.csv"
 )
 profile_fc = soil_properties.get_local_soil_profile_at_poi(
-    field_capacity, roi, scale, olm_bands
+    field_capacity, roi, scale, olm_bands, "Field capacity.csv"
 )
 
 
