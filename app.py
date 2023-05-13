@@ -141,11 +141,11 @@ with form:
     #Taking geometry point input from user
     list_input = st.text_input("Enter the list:")
     try:
+        global parsed_list
         parsed_list = ast.literal_eval(list_input)
         
         if isinstance(parsed_list, list):
             if len(parsed_list) == 1:
-                
                 coords_user = convert_to_point(parsed_list[0])
                 global roi
                 roi = coords_user
@@ -255,7 +255,7 @@ my_map.addLayer(sand, vis_params, "Sand Content")
 # Add a marker at the location of interest.
 #folium.Marker([lat, lon], popup="point of interest").add_to(my_map)
 # Create a polygon and add it to the map
-polygon = folium.Polygon(locations=roi, popup="Area of interest")
+polygon = folium.Polygon(locations=parsed_list, popup="Area of interest")
 polygon.add_to(my_map)
 # Add a layer control panel to the map.
 # Header for map
