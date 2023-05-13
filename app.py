@@ -259,11 +259,9 @@ my_map.addLayer(sand, vis_params, "Sand Content")
 
 # Add a marker at the location of interest.
 # Add a marker at the location of interest.
-#folium.Marker([lat, lon], popup="point of interest").add_to(my_map)
+folium.Marker(parsed_list, popup="point of interest").add_to(my_map)
 # Create a polygon and add it to the map
-polygon = folium.Polygon(locations=parsed_list, popup="Area of interest")
-my_map.addLayer(polygon)
-my_map.addLayerControl()
+
 # Add a layer control panel to the map.
 # Header for map
 st.subheader("Google Earth Map")
