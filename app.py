@@ -113,7 +113,8 @@ my_map = geemap.Map(
     zoom=3,
     Draw_export=True,
 )
-
+# Header for map
+st.subheader("Google Earth Map")
 # Display the map.
 my_map.to_streamlit(height=600, responsive=True, scrolling=False)
 
@@ -263,8 +264,7 @@ my_map.addLayer(sand, vis_params, "Sand Content")
 # Create a polygon and add it to the map
 
 # Add a layer control panel to the map.
-# Header for map
-st.subheader("Google Earth Map")
+
 
 
 
