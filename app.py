@@ -214,13 +214,13 @@ with form:
 
 
 # #Add a layer of the selected region on the map
-polygonBounds = roi.bounds()
-# Display the polygon bounds on the map
-bounds_style = {'color': 'red'}
-bounds_layer = geemap.ee_tile_layer(polygonBounds, bounds_style, 'Region of Interest')
-my_map.addLayer(bounds_layer)
-# Display the map
-my_map.addLayerControl()
+# polygonBounds = roi.bounds()
+# # Display the polygon bounds on the map
+# bounds_style = {'color': 'red'}
+# bounds_layer = geemap.ee_tile_layer(polygonBounds, bounds_style, 'Region of Interest')
+# my_map.addLayer(bounds_layer)
+# # Display the map
+# my_map.addLayerControl()
 
 # _______________________________________________________Determination of Soil Texture and Properties____________________________________________
 
@@ -254,6 +254,9 @@ my_map.addLayer(sand, vis_params, "Sand Content")
 # Add a marker at the location of interest.
 # Add a marker at the location of interest.
 #folium.Marker([lat, lon], popup="point of interest").add_to(my_map)
+# Create a polygon and add it to the map
+polygon = folium.Polygon(locations=roi, popup="Area of interest")
+polygon.add_to(my_map)
 # Add a layer control panel to the map.
 # Header for map
 st.subheader("Google Earth Map")
