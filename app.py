@@ -259,7 +259,7 @@ my_map.addLayer(sand, vis_params, "Sand Content")
 
 # Add a marker at the location of interest.
 # Add a marker at the location of interest.
-folium.Marker(parsed_list, popup="point of interest").add_to(my_map)
+#folium.Marker(parsed_list, popup="point of interest").add_to(my_map)
 # Create a polygon and add it to the map
 
 # Add a layer control panel to the map.
