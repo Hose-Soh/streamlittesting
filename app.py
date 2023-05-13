@@ -141,6 +141,7 @@ with form:
     list_input = st.text_input("Enter the list:")
     try:
         global parsed_list
+        parsed_list = [[-268.235321,22.435148],[-268.235321,22.480837],[-268.17627,22.480837],[-268.17627,22.435148],[-268.235321,22.435148]]
         parsed_list = ast.literal_eval(list_input)
         
         if isinstance(parsed_list, list):
@@ -172,11 +173,6 @@ drawn_features = my_map.draw_features
 # Get the last drawn feature from the map
 last_feature = my_map.draw_last_feature
 
-# Create a polygon and add it to the map
-polygon = folium.Polygon(locations=parsed_list, popup="Area of interest")
-polygon.add_to(my_map)
-# Fit the map bounds to the polygon
-my_map.fit_bounds(polygon.get_bounds())
 
 # #Check if anything was drawn on the map
 # if last_feature is not None:
@@ -266,7 +262,8 @@ my_map.addLayer(sand, vis_params, "Sand Content")
 #folium.Marker([lat, lon], popup="point of interest").add_to(my_map)
 # Create a polygon and add it to the map
 polygon = folium.Polygon(locations=parsed_list, popup="Area of interest")
-polygon.add_to(my_map)
+my_map.addLayer(polygon)
+my_map.addLayerControl()
 # Add a layer control panel to the map.
 # Header for map
 st.subheader("Google Earth Map")
