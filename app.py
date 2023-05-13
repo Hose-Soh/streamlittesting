@@ -114,6 +114,8 @@ my_map = geemap.Map(
     Draw_export=True,
 )
 
+# Display the map.
+my_map.to_streamlit(height=600, responsive=True, scrolling=False)
 
 with form:
     # Define the date range slider
@@ -269,8 +271,7 @@ polygon.add_to(my_map)
 # Header for map
 st.subheader("Google Earth Map")
 
-# Display the map.
-my_map.to_streamlit(height=600, responsive=True, scrolling=False)
+
 
 my_map.add_child(folium.LayerControl())
 
