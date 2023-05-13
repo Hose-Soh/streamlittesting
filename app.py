@@ -108,7 +108,11 @@ def convert_to_polygon(coordinates):
 
 
 
-
+# Create a GEE map centered on the location of interest
+my_map = geemap.Map(
+    zoom=3,
+    Draw_export=True,
+)
 
 
 with form:
@@ -159,11 +163,7 @@ with form:
     # button to update visualization
     update_depth = st.form_submit_button("Show Result")
 
-# Create a GEE map centered on the location of interest
-my_map = geemap.Map(
-    zoom=3,
-    Draw_export=True,
-)
+
 
 # Get the drawn features from the map
 drawn_features = my_map.draw_features
