@@ -2,8 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 '''
-    Contains  set of functions that generate visualisations used in the applicaiton
+    Contains  set of functions that generate visualisations used in the application
 '''
+
 
 # Definition of a function to attach a label to each bar.
 def autolabel_soil_prop(ax, rects):
@@ -20,6 +21,7 @@ def autolabel_soil_prop(ax, rects):
             fontsize=10,
         )
 
+
 def generate_pr_pet_rech_graph(recharge_df):
     '''
     Generates a line graph comparing Precipitation, Potential Evapotranspiration and Groundwater Recharge over time from a dataframe
@@ -35,15 +37,15 @@ def generate_pr_pet_rech_graph(recharge_df):
     )
 
     # Barplot associated with precipitation.
-    recharge_df["pr"].plot(kind="line", ax=ax, label="precipitation")
+    recharge_df["mean-pr"].plot(kind="line", ax=ax, label="precipitation")
 
     # Barplot associated with potential evapotranspiration.
-    recharge_df["pet"].plot(
+    recharge_df["mean-pet"].plot(
         kind="line", ax=ax, label="potential evapotranspiration", color="orange"
     )
 
     # Barplot associated with groundwater recharge
-    recharge_df["rech"].plot(kind="line", ax=ax, label="recharge", color="green")
+    recharge_df["mean-rech"].plot(kind="line", ax=ax, label="recharge", color="green")
 
     # Add a legend.
     ax.legend(loc='upper right')
@@ -53,8 +55,8 @@ def generate_pr_pet_rech_graph(recharge_df):
     ax.set_xlabel(None)
 
     # Define the date format and shape of x-labels.
-    x_labels = recharge_df.index.strftime("%m-%Y")
-    ax.set_xticklabels(x_labels, rotation=90, fontsize=10)
+    x_labels = recharge_df.index.strftime("%m-%Y").to_list()
+    ax.set_xticks(x_labels)
 
     return fig
 
@@ -65,15 +67,15 @@ def generate_pr_pet_graph(meteo_df):
 
     # Title of the plot.
     ax.set_title(
-        "Comparison of Precipitation and Potential Evapotranspiration", fontsize=14
+        "Comparison of mean Precipitation and Potential Evapotranspiration over ROI", fontsize=14
     )
 
-    # Barplot associated with precipitations.
-    meteo_df["pr"].plot(kind="line", ax=ax, label="precipitation")
+    # Lineplot associated with precipitations.
+    meteo_df["mean-pr"].plot(kind="line", ax=ax, label="Mean Precipitation")
 
-    # Barplot associated with potential evapotranspiration.
-    meteo_df["pet"].plot(
-        kind="line", ax=ax, label="potential evapotranspiration", color="orange", alpha=0.5
+    # Lineplot associated with potential evapotranspiration.
+    meteo_df["mean-pet"].plot(
+        kind="line", ax=ax, label="Mean Potential Evapotranspiration", color="orange", alpha=0.5
     )
 
     # Add a legend.
@@ -84,10 +86,11 @@ def generate_pr_pet_graph(meteo_df):
     ax.set_xlabel(None)
 
     # Define the date format and shape of x-labels.
-    x_labels = meteo_df.index.strftime("%m-%Y")
-    ax.set_xticklabels(x_labels, rotation=90, fontsize=10)
+    x_labels = meteo_df['date'].to_list()
+    ax.set_xticks(x_labels)
 
     return fig
+
 
 def generate_hydraulic_props_chart(profile_wp, profile_fc, olm_bands, olm_depths):
     fig, ax = plt.subplots(figsize=(15, 6))
@@ -146,6 +149,7 @@ def generate_hydraulic_props_chart(profile_wp, profile_fc, olm_bands, olm_depths
 
     return fig
 
+
 def generate(profile_sand, profile_clay, profile_orgc, olm_bands, olm_depths):
     # Data visualization in the form of a bar plot.
     # Create the plot
@@ -185,7 +189,6 @@ def generate(profile_sand, profile_clay, profile_orgc, olm_bands, olm_depths):
         color="black",
         alpha=0.75,
     )
-
 
     # Application of the function to each barplot.
     autolabel_soil_prop(ax, rect1)

@@ -1,8 +1,10 @@
 import ee
 import ee_utils
+
 '''
 Functions related to the calculation of Soild Water Recharge (SWR)
 '''
+
 
 def olm_prop_mean(olm_image, band_output_name):
     """
@@ -23,6 +25,7 @@ def olm_prop_mean(olm_image, band_output_name):
 
     return mean_image
 
+
 def calculate_available_water(fcm, wpm, zr):
     # Calculate the theoretical available water.
     taw = (
@@ -30,10 +33,10 @@ def calculate_available_water(fcm, wpm, zr):
     )
     return taw
 
+
 def calculate_stored_water_at_fc(taw, p):
     stfc = taw.multiply(p)
     return stfc
-
 
 
 def get_soil_hydric_bands(stfc, time0):
@@ -60,9 +63,7 @@ def get_soil_hydric_bands(stfc, time0):
     return initial_image, ee.List([initial_image])
 
 
-
 def compute_recharge(meteo_data, image_list, stfc, fcm, wpm):
-    
     def calculate_recharge(image, image_list):
         """
         Contains operations made at each iteration.
@@ -85,16 +86,16 @@ def compute_recharge(meteo_data, image_list, stfc, fcm, wpm):
         # DO NOT FORGET TO CAST THE TYPE WITH .float().
         new_rech = (
             ee.Image(0)
-            .set("system:time_start", localdate)
-            .select([0], ["rech"])
-            .float()
+                .set("system:time_start", localdate)
+                .select([0], ["rech"])
+                .float()
         )
 
         new_apwl = (
             ee.Image(0)
-            .set("system:time_start", localdate)
-            .select([0], ["apwl"])
-            .float()
+                .set("system:time_start", localdate)
+                .select([0], ["apwl"])
+                .float()
         )
 
         new_st = (
@@ -162,10 +163,9 @@ def compute_recharge(meteo_data, image_list, stfc, fcm, wpm):
         new_image = new_rech.addBands(ee.Image([new_apwl, new_st, pr_im, pet_im]))
 
         # Add the new ee.Image to the ee.List.
-        return ee.List(image_list).add(new_image) 
-    
-    return meteo_data.iterate(calculate_recharge, image_list)
+        return ee.List(image_list).add(new_image)
 
+    return meteo_data.iterate(calculate_recharge, image_list)
 
 
 def get_recharge_at_poi_df(meteo, poi, scale, stfc, fcm, wpm, time0):
@@ -182,4 +182,58 @@ def get_recharge_at_poi_df(meteo, poi, scale, stfc, fcm, wpm, time0):
     arr = rech_coll.getRegion(poi, scale).getInfo()
     rdf = ee_utils.ee_array_to_df(arr, ["pr", "pet", "apwl", "st", "rech"]).sort_index()
 
+    return rdf
+
+
+def get_monthly_mean_recharge_at_roi_df(meteo, roi, scale, stfc, fcm, wpm, time0):
+    initial_image, image_list = get_soil_hydric_bands(stfc, time0)
+    # Iterate the user-supplied function to the meteo collection.
+    rech_list = compute_recharge(meteo, image_list, stfc, fcm, wpm)
+
+    # Remove the initial image from our list.
+    rech_list = ee.List(rech_list).remove(initial_image)
+
+    # Transform the list into an ee.ImageCollection.
+    rech_coll = ee.ImageCollection(rech_list)
+
+    arr = rech_coll.getRegion(roi, scale).getInfo()
+    # The df contains data across all points sampled, so we need to reduce this to be the mean
+    # across all points in the ROI for each month
+    # To avoid loosing the datetime and time fields (used elsewhere), group by both then remove time from the index
+    rdf = ee_utils.ee_array_to_df(arr, ["pr", "pet", "apwl", "st", "rech"]).groupby(['datetime', 'time']).mean(
+        ['pr', 'pet', "apwl", "st", "rech"]).sort_values("datetime")
+
+    rdf.reset_index(level='time', inplace=True)
+    rdf.rename(columns={'pr': 'mean-pr'}, inplace=True)
+    rdf.rename(columns={'pet': 'mean-pet'}, inplace=True)
+    rdf.rename(columns={'apwl': 'mean-apwl'}, inplace=True)
+    rdf.rename(columns={'st': 'mean-st'}, inplace=True)
+    rdf.rename(columns={'rech': 'mean-rech'}, inplace=True)
+    rdf["date"] = rdf.index.strftime("%m-%Y")
+
+    return rdf
+
+
+def get_mean_annual_recharge_at_roi_df(meteo, roi, scale, stfc, fcm, wpm, time0):
+    initial_image, image_list = get_soil_hydric_bands(stfc, time0)
+    # Iterate the user-supplied function to the meteo collection.
+    rech_list = compute_recharge(meteo, image_list, stfc, fcm, wpm)
+
+    # Remove the initial image from our list.
+    rech_list = ee.List(rech_list).remove(initial_image)
+
+    # Transform the list into an ee.ImageCollection.
+    rech_coll = ee.ImageCollection(rech_list)
+
+    arr = rech_coll.getRegion(roi, scale).getInfo()
+    # The df contains data across all points sampled, so we need to reduce this to be the mean
+    # across all points in the ROI for each month
+    rdf = ee_utils.ee_array_to_df(arr, ["pr", "pet", "apwl", "st", "rech"])
+    rdf['year'] = rdf.index.strftime("%Y")
+    rdf = rdf.groupby('year').mean(['pr', 'pet', "apwl", "st", "rech"]).sort_values('year')
+    rdf.rename(columns={'pr': 'mean-annual-pr'}, inplace=True)
+    rdf.rename(columns={'pet': 'mean-annual-pet'}, inplace=True)
+    rdf.rename(columns={'apwl': 'mean-annual-apwl'}, inplace=True)
+    rdf.rename(columns={'st': 'mean-annual-st'}, inplace=True)
+    rdf.rename(columns={'rech': 'mean-annual-rech'}, inplace=True)
     return rdf

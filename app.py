@@ -1,18 +1,17 @@
 import json
-from datetime import datetime, timedelta, date
+from datetime import datetime
 import soil_properties
 import hydro_properties
 import met_properties
 import recharge_properties
-import ee_utils
 import ee
-import geemap.colormaps as cm
 import geemap.foliumap as geemap
 import streamlit as st
 import base64
 import logging
 import ui_visuals
 import ast
+import folium
 
 logger = logging.getLogger(__name__)
 
@@ -66,15 +65,6 @@ st.markdown(
 """,
     unsafe_allow_html=True,
 )
-
-# _________________________Importing Libraries______________________
-
-import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-import folium
-import pprint
-import branca.colormap as cm
 
 # __________________________Input Parameters________________________
 
@@ -136,9 +126,10 @@ with form:
     )
     
     #Taking geometry point input from user
-    list_input = st.text_input("Enter the list:")
+    list_input = st.text_input("Enter the list:", "[[-268.235321,22.435148],[-268.235321,22.480837],[-268.17627,22.480837],[-268.17627,22.435148],[-268.235321,22.435148]]")
     try:
         global parsed_list
+        #default value for parsed_list
         parsed_list = [[-268.235321,22.435148],[-268.235321,22.480837],[-268.17627,22.480837],[-268.17627,22.435148],[-268.235321,22.435148]]
         parsed_list = ast.literal_eval(list_input)
         
@@ -165,11 +156,13 @@ with form:
     update_depth = st.form_submit_button("Show Result")
 
 
+#_____________________________This code blocks are written to retrive coordinates from ROI drawn by user on the map.___________ 
+# But it does not work in streamlit_____________________________________________________
 
-# Get the drawn features from the map
-drawn_features = my_map.draw_features
-# Get the last drawn feature from the map
-last_feature = my_map.draw_last_feature
+# # Get the drawn features from the map
+# drawn_features = my_map.draw_features
+# # Get the last drawn feature from the map
+# last_feature = my_map.draw_last_feature
 
 
 # #Check if anything was drawn on the map
@@ -291,13 +284,13 @@ my_map.addLayerControl()
 
 # Obtain the Soil Profiles at the point
 profile_sand = soil_properties.get_local_soil_profile_at_poi(
-    sand, roi, scale, olm_bands, "Sand Data.csv"
+    sand, roi, scale, olm_bands
 )
 profile_clay = soil_properties.get_local_soil_profile_at_poi(
-    clay, roi, scale, olm_bands, "Clay Data.csv"
+    clay, roi, scale, olm_bands
 )
 profile_orgc = soil_properties.get_local_soil_profile_at_poi(
-    orgc, roi, scale, olm_bands, "Organic Carbon Data.csv"
+    orgc, roi, scale, olm_bands
 )
 
 
@@ -321,7 +314,7 @@ orgm = soil_properties.convert_orgc_to_orgm(orgc)
 
 # Organic matter content profile.
 profile_orgm = soil_properties.get_local_soil_profile_at_poi(
-    orgm, roi, scale, olm_bands, "Organic Matter Content.csv"
+    orgm, roi, scale, olm_bands
 )
 
 # Obtain Field Capacity and Wilting Points
@@ -330,10 +323,10 @@ field_capacity, wilting_point = hydro_properties.compute_hyrdo_properties(
 )
 
 profile_wp = soil_properties.get_local_soil_profile_at_poi(
-    wilting_point, roi, scale, olm_bands, "Wilting Point.csv"
+    wilting_point, roi, scale, olm_bands
 )
 profile_fc = soil_properties.get_local_soil_profile_at_poi(
-    field_capacity, roi, scale, olm_bands, "Field capacity.csv"
+    field_capacity, roi, scale, olm_bands
 )
 
 
@@ -351,9 +344,11 @@ st.pyplot(
 )
 
 
+
+
 # _____________________________________________Getting Meteorological Datasets_____________________________________________
-meteo = met_properties.get_meteorological_for_poi(roi, scale, i_date, f_date)
-meteo_df = met_properties.get_meteorological_df_for_poi(meteo, roi, scale)
+meteo = met_properties.get_mean_monthly_meteorological_data(i_date, f_date)
+meteo_df = met_properties.get_mean_monthly_meteorological_data_for_roi_df(roi, scale, meteo)
 
 # _____________________________________________Display Meteorological Dataset_____________________________________________
 # Adding subheader and description for mateorological data
@@ -381,7 +376,7 @@ href = f'<a href="data:file/csv;base64,{b64}" download="meteo_data.csv">Download
 st.markdown(href, unsafe_allow_html=True)
 
 st.write(
-    "The visualization displays the trends of both precipitation and potential evapotranspiration over time, allowing users to analyze how these variables have changed in the selected region."
+    "The visualization displays the trends of both the mean precipitation and mean potential evapotranspiration over time for the region of interest, allowing users to analyze how these variables have changed in the selected region."
 )
 
 st.pyplot(ui_visuals.generate_pr_pet_graph(meteo_df))
@@ -402,10 +397,9 @@ taw = recharge_properties.calculate_available_water(fcm, wpm, zr)
 stfc = recharge_properties.calculate_stored_water_at_fc(taw, p)
 
 # Define the initial time (time0) according to the start of the collection.
-time0 = meteo_df.iloc[0]["time"]
+time0 = meteo.first().get("system:time_start")
 
-recharge_df = recharge_properties.get_recharge_at_poi_df(meteo, roi, scale, stfc, fcm, wpm, time0)
-
+recharge_df = recharge_properties.get_monthly_mean_recharge_at_roi_df(meteo, roi, scale, stfc, fcm, wpm, time0)
 
 # subheader
 st.subheader("Comparison of Precipitation, Potential Evapotranspiration, and Recharge")
@@ -439,12 +433,12 @@ st.pyplot(ui_visuals.generate_pr_pet_rech_graph(recharge_df))
 rdfy = recharge_df.resample("Y").sum()
 
 # Calculate the mean value.
-mean_recharge = rdfy["rech"].mean()
+annual_mean_recharge_df = recharge_properties.get_mean_annual_recharge_at_roi_df(meteo, roi, scale, stfc, fcm, wpm, time0)
 
-# Print the result.
 st.write(
-    "The mean annual recharge at our point of interest is", int(mean_recharge), "mm/an"
+    "The mean annual recharge at across region of interest"
 )
+st.write(annual_mean_recharge_df[['mean-annual-rech']].round(2).rename(columns={'mean-annual-rech': 'Mean Annual Recharge'}))
 
 
 # #___________________________________Groundwater recharge comparison between multiple places_________________________________________
